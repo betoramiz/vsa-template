@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Beto Ramirez",
+  "classifications": [ "Web", "API", "Vertical Slice Architecture" ],
+  "identity": "VsaTemplate.Solution",
+  "name": "VSA API Solution (ASP.NET Core + EF Core + Vertical Slice Architecture)",
+  "shortName": "vsa-api",
+  "sourceName": "VsaTemplate",
+  "preferNameDirectory": true,
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "symbols": {
+    "generated": {
+      "type": "generated",
+      "generator": "guid",
+      "replaces": "8be88b6b-d547-4f34-8441-c0b1624b60a5"
+    },
+    "IncludeSampleFeature": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Incluye la feature de ejemplo (Products/Orders) y sus DbSets."
+    },
+    "IncludeComments": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "false",
+      "description": "Incluye los comentarios explicativos de diseño en Common/Composition."
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "exclude": [
+            ".template.config/**",
+            ".claude/**",
+            "TUTORIAL.md",
+            "TEMPLATE.md",
+            "VsaTemplate.sln.DotSettings.user",
+            "src/VsaTemplate/vsatemplate.db",
+            "src/VsaTemplate/vsatemplate.db-shm",
+            "src/VsaTemplate/vsatemplate.db-wal",
+            "vsatemplate.db-shm",
+            "vsatemplate.db-wal",
+            "src/VsaTemplate/openapi/**",
+            "src/VsaTemplate/Common/Persistence/Migrations/**",
+            ".git/**",
+            ".idea/**",
+            ".vs/**",
+            "**/bin/**",
+            "**/obj/**"
+          ]
+        },
+        {
+          "condition": "(!IncludeSampleFeature)",
+          "exclude": [
+            "src/VsaTemplate/Features/Products/**",
+            "src/VsaTemplate/Features/Orders/**",
+            "src/VsaTemplate/Features/Notifications/**",
+            "tests/VsaTemplate.Tests/Features/Products/**",
+            "tests/VsaTemplate.Tests/Features/Orders/**",
+            "tests/VsaTemplate.Tests/Integration/ProductsApiTests.cs",
+            "tests/VsaTemplate.Tests/Integration/OrdersApiTests.cs",
+            "tests/VsaTemplate.Tests/Common/EventDispatcherTests.cs",
+            "tests/VsaTemplate.Tests/Common/TrySaveChangesAsyncTests.cs"
+          ]
+        }
+      ]
+    }
+  ]
+}

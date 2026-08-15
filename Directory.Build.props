@@ -1,0 +1,14 @@
+<Project>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- Símbolos que también existen como parámetros de "dotnet new" (ver
+         .template.config/template.json). Siempre definidos acá para que este
+         repo compile con la feature de ejemplo y los comentarios completos;
+         el Template Engine evalúa los #if por su cuenta al generar. -->
+    <DefineConstants>$(DefineConstants);IncludeSampleFeature;IncludeComments</DefineConstants>
+  </PropertyGroup>
+
+</Project>
