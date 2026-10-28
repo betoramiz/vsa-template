@@ -23,7 +23,7 @@ dotnet ef migrations add <Nombre> --project src/VsaTemplate -o Common/Persistenc
 dotnet new install . && dotnet new vsa-api -n Acme.Orders -o Acme.Orders   # probar la plantilla
 ```
 
-Las migraciones pendientes se aplican solas al arrancar, pero **solo en Development** (`ApplyPendingMigrations`). Versiones de paquetes centralizadas en `Directory.Packages.props`; no hay linter configurado.
+Las migraciones pendientes se aplican solas al arrancar, pero **solo en Development** (`ApplyPendingMigrations`). El repo no trae migraciones commiteadas: en una base nueva crea `Initial` primero o las consultas dan `no such table` (verificado). Skills del proyecto en `.claude/skills/` (en inglés): `add-use-case`, `add-feature-slice`, `add-ef-migration`, `add-domain-event`. Versiones de paquetes centralizadas en `Directory.Packages.props`; no hay linter configurado.
 
 ## Arquitectura
 

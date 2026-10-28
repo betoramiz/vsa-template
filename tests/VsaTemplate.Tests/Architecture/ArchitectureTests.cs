@@ -47,7 +47,7 @@ public class ArchitectureTests
         Assert.True(failures.Count == 0,
             "Estos tipos usan casos de uso de otro slice. Lo público de un slice es su " +
             "Domain (consultas) y sus Contracts (eventos); para lo demás, comunícate por " +
-            $"eventos (README, regla 1):\n{string.Join('\n', failures)}");
+            $"eventos (README, Reglas de la arquitectura, regla 1):\n{string.Join('\n', failures)}");
     }
 
     [Fact]
@@ -94,7 +94,7 @@ public class ArchitectureTests
 
         Assert.True(offenders.Count == 0,
             "Reaccionar a un evento es lógica de negocio y pertenece a un slice, no a " +
-            "Common (README, regla del sentido de la flecha):\n" + string.Join('\n', offenders));
+            "Common (README, Reglas de la arquitectura, regla 2):\n" + string.Join('\n', offenders));
     }
 
     [Fact]

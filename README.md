@@ -36,8 +36,23 @@ dotnet run --project src/VsaTemplate     # API en http://localhost:5xxx
 dotnet test                              # unitarios + integración
 ```
 
-Usa SQLite por defecto (`vsatemplate.db`); las migraciones pendientes se
-aplican solas al arrancar. Nada más que configurar para empezar.
+Usa SQLite por defecto (`vsatemplate.db`). En Development, las migraciones
+pendientes se aplican solas al arrancar. **El repo no trae ninguna migración
+commiteada** (`Common/Persistence/Migrations/` se genera y la plantilla no la
+incluye), así que en una base nueva hay que crear la inicial antes de la
+primera corrida, o las consultas fallan con `no such table`:
+
+```bash
+dotnet tool restore                      # dotnet-ef es tool local (dotnet-tools.json)
+dotnet ef migrations add Initial --project src/VsaTemplate -o Common/Persistence/Migrations
+```
+
+### Manejo de secretos
+
+Los secretos (p. ej. la clave de firma JWT) no van en `appsettings.json`: en
+desarrollo usa `dotnet user-secrets` (el proyecto ya tiene `UserSecretsId`) y en
+producción variables de entorno. Para un secret store real (Azure Key Vault,
+AWS Secrets Manager…) agrégalo como proveedor de configuración en `Program.cs`.
 
 ## Estructura a grandes rasgos
 
@@ -62,6 +77,21 @@ Un caso de uso nuevo casi siempre son dos pasos: un archivo en
 `Endpoints.cs` del feature. No hay que tocar archivos de registro central —
 todo se descubre por convención.
 
+## Reglas de la arquitectura
+
+1. **Un slice no usa los casos de uso de otro slice.** Lo público de un slice
+   es su `Domain/` (consultas vía el DbContext compartido) y sus `Contracts/`
+   (eventos publicados); todo lo demás es privado.
+2. **`Common` nunca depende de casos de uso de los slices** (la flecha va en un
+   solo sentido). Reaccionar a un evento es lógica de negocio: los
+   `IEventHandler<T>` viven en `Features/`.
+3. **Nada entra a `Common` hasta que se repite en 3+ features.**
+4. **`Endpoints.cs` solo enruta**; la lógica vive en el handler del caso de uso.
+5. **La complejidad es opt-in por slice** (domain model, validators, etc.).
+
+Las reglas 1 y 2, más las convenciones de nombres y registro, están codificadas
+en `tests/VsaTemplate.Tests/Architecture/ArchitectureTests.cs`.
+
 ## Qué trae de fábrica
 
 - **Validación** (FluentValidation) vía endpoint filter, antes del handler.
@@ -69,8 +99,12 @@ todo se descubre por convención.
 - **Auth JWT** con policies declaradas por slice, no centralizadas.
 - **Paginación** reusable para listados (`IPagedRequest` / `PagedResponse<T>`).
 - **Eventos in-process** para comunicar slices sin acoplarlos.
-- **Contrato OpenAPI → TypeScript**, para generar clientes Angular desde el
-  JSON que emite cada build.
+- **Contrato OpenAPI → TypeScript**, para generar clientes Angular. El
+  documento se sirve en `/openapi/v1.json` y la UI en `/scalar/v1` (solo
+  Development/Staging). Para emitirlo a `src/VsaTemplate/openapi/` en cada build,
+  pon `OpenApiGenerateDocumentsOnBuild` en `true` en el `.csproj` (hoy está en
+  `false`); luego:
+  `npx ng-openapi-gen --input src/VsaTemplate/openapi/VsaTemplate.json --output src/app/api`.
 - **Health checks**, **rate limiting** y **logging estructurado** (Serilog)
   listos para producción.
 

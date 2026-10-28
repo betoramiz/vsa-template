@@ -38,7 +38,6 @@
             ".template.config/**",
             ".claude/**",
             "TUTORIAL.md",
-            "TEMPLATE.md",
             "VsaTemplate.sln.DotSettings.user",
             "src/VsaTemplate/vsatemplate.db",
             "src/VsaTemplate/vsatemplate.db-shm",

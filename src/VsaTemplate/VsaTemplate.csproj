@@ -4,8 +4,9 @@
     <!-- Emite openapi/VsaTemplate.json en cada build (vía
          Microsoft.Extensions.ApiDescription.Server). Es el contrato que
          consume el generador de TypeScript sin necesitar la API corriendo.
-         Deshabilitado: AddOpenApi() está comentado en Program.cs, así que
-         no hay IDocumentProvider registrado para generar el documento. -->
+         Deshabilitado por defecto (AddOpenApiDocument() sí está registrado y
+         el documento se sirve en runtime); ponlo en true para commitear el
+         JSON como artefacto. -->
     <OpenApiDocumentsDirectory>$(MSBuildProjectDirectory)/openapi</OpenApiDocumentsDirectory>
     <OpenApiGenerateDocumentsOnBuild>false</OpenApiGenerateDocumentsOnBuild>
     <!-- Habilita `dotnet user-secrets` para este proyecto. WebApplication.CreateBuilder
